@@ -1,4 +1,4 @@
-package projet3;
+package agencedevoyage;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,12 +25,12 @@ public class CalculDate {
     }
 	public int anneenaissance(String s) throws IOException
 	{
-		File f=new File("C:\\Agence\\TouslesVoyageurs\\"+s+"\\Donnees.txt");
+		File f=new File("C:\\AgencedeVoyage\\Tousvoyages\\"+s+".txt");
 		BufferedReader reader= new BufferedReader(new FileReader(f));
 		String[] tab=reader.readLine().split("---");
-		
-		String[] tab2=tab[3].split("/");
-		int anneenaissance=Integer.parseInt(tab2[0]);
+		String[] tab2=tab[4].split("-");
+		int anneenaissance=Integer.parseInt(tab2[2]);
+		reader.close();
 		return anneenaissance;
 	}
 	public int calculAge(String s) throws IOException
@@ -39,18 +39,19 @@ public class CalculDate {
 	}
 	public void tableauAge () throws IOException
 	{
-		File f=new File("C:\\Agence\\TouslesVoyageurs");
+		File f=new File("C:\\AgencedeVoyage\\Tousvoyages\\");
 		String[] tab=f.list();
 		for (int i=0;i<tab.length;i++)
 		{
-			int age=calculAge(tab[i]);
-			h.put(tab[i], age);		
+			int age=calculAge(tab[i].substring(0,tab[i].indexOf(".")));
+			h.put(tab[i].substring(0,tab[i].indexOf(".")), age);		
 		}
 		System.out.println(h);
 		
 	}
-	public void trancheAge ()
+	public void trancheAge () throws IOException
 	{
+		tableauAge();
 		int comptinf18=0;
 		int compt1935=0;
 		int compt3660=0;
