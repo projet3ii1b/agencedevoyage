@@ -18,6 +18,14 @@ import java.util.Scanner;
 	   protected File fichier ;
 	   protected FileWriter FW;
 		protected BufferedWriter BW;
+		public void setAnnee(String ch)
+		{
+			annee=ch;
+		}
+		public void setMois(String ch)
+		{
+			mois=ch;
+		}
 	   public void saisie(String depart,String destination,String date1,String date2) throws IOException
 	   {
 		   annee=date1.split("-")[2];
@@ -239,21 +247,8 @@ import java.util.Scanner;
         	}
         	BP.close();
         	reader1.close();
-	    supprimervoyagemois(annee,mois,date2);
+	    supprimervoyagemois2(annee,mois,date2);
         
-    }
-    void supprimervoyagemois(String annee,String mois ,String date) throws IOException {
-        
-    	File file = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+mois+".txt");
-		File temp = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+"temp" +mois+".txt");
-	    PrintWriter out = new PrintWriter(new FileWriter(temp));
-	    Files.lines(file.toPath()).filter(line -> !line.contains(date)).forEach(out::println);
-	    out.flush();
-	    out.close();
-	    temp.renameTo(file);
-	   file.delete();
-	    File ch = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+mois+".txt");
-	    temp.renameTo(ch);
     }
     void retarderanneesaison(String annee,String annee2,String mois,String mois2,String date1 ,String date2) throws IOException
     {
@@ -296,7 +291,7 @@ import java.util.Scanner;
         	}
         	BP.close();
         	reader1.close();
-	    supprimervoyage(annee,mois,date2);
+	    supprimervoyagesaison2(annee,mois,date2);
     }
     void retardermememois(String annee,String mois,String date1 ,String date2) throws IOException
     {
@@ -359,7 +354,7 @@ import java.util.Scanner;
         	}
         	BP.close();
         	reader1.close();
-	    supprimervoyagemois(annee,mois,date2);
+	    supprimervoyagemois2(annee,mois,date2);
     }
     void retardernvsaison (String annee,String mois,String mois2,String date1 , String date2) throws IOException
     {
@@ -402,19 +397,57 @@ import java.util.Scanner;
         	}
         	BP.close();
         	reader1.close();
-	    supprimervoyage(annee,mois,date2);
+	    supprimervoyagesaison2(annee,mois,date2);
 				
 			 
     	
     }
-
-    void supprimervoyage(String annee,String mois ,String date) throws IOException {
-        String ses=getsaison( mois);
+  void supprimervoyagemois(String annee,String mois ,String datededepart,String datederetour) throws IOException {
         
+    	File file = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+mois+".txt");
+		File temp = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+"temp" +mois+".txt");
+	    PrintWriter out = new PrintWriter(new FileWriter(temp));
+	    Files.lines(file.toPath()).filter(line -> (!line.contains(datededepart)&&!line.contains(datederetour))).forEach(out::println);
+	    out.flush();
+	    out.close();
+	    temp.renameTo(file);
+	   file.delete();
+	    File ch = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+mois+".txt");
+	    temp.renameTo(ch);
+    }
+  void supprimervoyagemois2(String annee,String mois ,String date) throws IOException {
+      
+  	File file = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+mois+".txt");
+		File temp = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+"temp" +mois+".txt");
+	    PrintWriter out = new PrintWriter(new FileWriter(temp));
+	    Files.lines(file.toPath()).filter(line -> !line.contains(date)).forEach(out::println);
+	    out.flush();
+	    out.close();
+	    temp.renameTo(file);
+	   file.delete();
+	    File ch = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+mois+".txt");
+	    temp.renameTo(ch);
+  }
+  void supprimervoyagesaison(String annee,String mois ,String datededepart,String datederetour) throws IOException {
+      String ses=getsaison( mois);
+  	File file = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+ses+".txt");
+		File temp = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+"temp" +ses+".txt");
+	    PrintWriter out = new PrintWriter(new FileWriter(temp));
+	    Files.lines(file.toPath()).filter(line ->( !line.contains(datededepart)&&!line.contains(datederetour))).forEach(out::println);
+	    out.flush();
+	    out.close();
+	    temp.renameTo(file);
+	   file.delete();
+	    File ch = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+ses+".txt");
+	    temp.renameTo(ch);
+  }
+  
+    void supprimervoyagesaison2(String annee,String mois ,String date) throws IOException {
+        String ses=getsaison( mois);
     	File file = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+ses+".txt");
 		File temp = new File("C:\\AgencedeVoyage\\Année\\"+ annee+"\\"+"temp" +ses+".txt");
 	    PrintWriter out = new PrintWriter(new FileWriter(temp));
-	    Files.lines(file.toPath()).filter(line -> !line.contains(date)).forEach(out::println);
+	    Files.lines(file.toPath()).filter(line ->( !line.contains(date))).forEach(out::println);
 	    out.flush();
 	    out.close();
 	    temp.renameTo(file);
@@ -430,7 +463,6 @@ import java.util.Scanner;
             linenumber++;
             }
         lnr.close(); 
-       System.out.println(linenumber);
         return( linenumber );
     }
     

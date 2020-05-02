@@ -80,6 +80,7 @@ public class Touslesvoyages {
 	public void AjouterVoyageur() throws IOException
 	{
 		a = new Année();
+		paysfolder();
 		System.out.println("Donner votre numero de passeport : ");
 		sc=new Scanner(System.in);
 		numpasseport=sc.nextLine();
@@ -92,6 +93,7 @@ public class Touslesvoyages {
 				AjouterDonnes();
 				SaisieVoyagesFaites();
 				AjouterUnVoyage();
+				Ajoutvoyagepays();
 				NomDestination=nomDestination();
 				if (choix==0)
 				{
@@ -118,6 +120,7 @@ public class Touslesvoyages {
 			afficherVoyagesFaites(numpasseport);
 			SaisieVoyagesFaites();
 			AjouterUnVoyage();	
+			Ajoutvoyagepays();
 			NomDestination=nomDestination();
 			if (choix==0)
 			{
@@ -194,12 +197,40 @@ public class Touslesvoyages {
 	{
 	    FileWriter FP;
 		BufferedWriter BP;
-		filepays=new File("C:\\AgencedeVoyage\\Tousvoyages\\pays\\"+this.destination+".txt");
+		String ch1=this.destination.substring(0,this.destination.indexOf('-'));
+		filepays=new File("C:\\AgencedeVoyage\\pays\\"+ch1+".txt");
+		if (!filepays.exists())
+		{
+			filepays.createNewFile();
+		}
 		FP=new FileWriter(filepays,true);
 		BP=new BufferedWriter(FP);
 		String ch=this.depart+"---"+this.destination+"---"+this.datededepart+"---"+this.datederetour+"\n";
 		BP.write(ch);
 		BP.close();
+	}
+	
+	void nombreVoyagepaysSP(String nompays) throws IOException
+	{
+		BufferedReader reader= new BufferedReader(new FileReader("C:\\AgencedeVoyage\\pays\\"+nompays));
+    	String line;
+    	System.out.println("Les voyages vers "+nompays.substring(0,nompays.indexOf("."))+" sont : ");
+    	while (( line= reader.readLine())!=null)
+    	{
+    			System.out.println(line);
+    		
+    	}
+    	reader.close();
+		
+	}
+	void nombreVoyagesspaysTotale() throws IOException
+	{
+		File dossierPays=new File("C:\\AgencedeVoyage\\pays\\");
+		String[] tab=dossierPays.list();
+		for(int i=0;i<tab.length;i++)
+		{
+			nombreVoyagepaysSP(tab[i]);
+		}
 	}
 	public String getDatedenaissance()
 	{
@@ -237,9 +268,9 @@ public class Touslesvoyages {
 	{ 
 		return ( destination );
 	}
-	public Touslesvoyages()
+	public Touslesvoyages() throws IOException
 	{
-		//a = new Année();
+		a = new Année();
 		sc=new Scanner(System.in);
 		File dossierPrincipal=new File("C:\\AgencedeVoyage");
 		if (dossierPrincipal.isDirectory()!=true)
@@ -271,6 +302,24 @@ public class Touslesvoyages {
     	}
     	reader.close();
     }
+    public void afficherVoyagesFaitesAC() throws IOException//saisie au clavier
+    {
+    	System.out.println("Donner le numéro de passeport du voyageur que vous voulez affichez ses voyages ");
+    	sc=new Scanner(System.in);
+    	String ch=sc.nextLine();
+    	BufferedReader reader= new BufferedReader(new FileReader("C:\\AgencedeVoyage\\Tousvoyages\\"+ch+".txt"));
+    	String line;
+    	System.out.println("Les voyages effectués par "+ch+" sont : ");
+    	while (( line= reader.readLine())!=null)
+    	{
+    		if (!line.contains(ch))
+    		{
+    			System.out.println(line);
+    		}
+    		
+    	}
+    	reader.close();
+    }
     public void afficherVoyagesFaites(String pass) throws IOException
     {
     	BufferedReader reader= new BufferedReader(new FileReader("C:\\AgencedeVoyage\\Tousvoyages\\"+pass+".txt"));
@@ -285,6 +334,27 @@ public class Touslesvoyages {
     	}
     	reader.close();
     }
+    public void afficherTouslesVoyages() throws IOException
+	{
+		File dossierTouslesVoyageurs =new File("C:\\AgencedeVoyage\\Tousvoyages\\");
+		String[] listeVoyageurs=dossierTouslesVoyageurs.list();
+		for (int i=0;i<listeVoyageurs.length;i++)
+		{
+			File f=new File("C:\\AgencedeVoyage\\Tousvoyages\\"+listeVoyageurs[i]);
+	    	BufferedReader reader= new BufferedReader(new FileReader(f));
+	    	String line;
+	    	int x=listeVoyageurs[i].indexOf('.');
+	    	
+	    	System.out.println("les voyages effectués pour le voyageur "+listeVoyageurs[i].substring(0,x)+" sont ");
+	    	while (( line= reader.readLine())!=null  )
+	    	{ 
+	    		if (!line.contains(listeVoyageurs[i].substring(0,x)))
+	    		System.out.println(line) ;
+	    	}
+	    	reader.close();
+		}
+		
+	}
     public void copier(String pass) throws IOException 
     {
     	InputStream inStream = null;
@@ -324,44 +394,61 @@ public class Touslesvoyages {
              // System.out.println(linenumber-1);
                  return( linenumber-1  );
     }
-    void supprimervoyage(String annee,String mois,String pays1,String pass,String date ) throws IOException
+    void supprimervoyage() throws IOException
     {
-    	a.supprimervoyage(annee, mois, date);
-    	supprimervoyagepays(pays1,date);
-    	File file = new File("C:\\AgencedeVoyage\\Tousvoyages\\"+ pass + ".txt");
-		File temp = new File("C:\\AgencedeVoyage\\Tousvoyages\\"+"temp" + pass+".txt");
+    	sc=new Scanner(System.in);
+    	Voyageengroupe VG=new Voyageengroupe();
+    	System.out.println("Donner le numero de passeport de voyageur que vous voulez supprimez son voyage : ");
+    	numpasseport=sc.nextLine();
+    	System.out.println("Donner la place de depart");
+    	depart=sc.nextLine();
+    	System.out.println("Donner la destination sous la forme (PAYS-VILLE) : ");
+    	destination=sc.nextLine();
+    	System.out.println("Donner la date de depart de ce voyage : ");
+    	datededepart=sc.nextLine();
+    	System.out.println("Donner la date de retour de ce voyage");
+    	datederetour=sc.nextLine();
+    	String[] tab=datededepart.split("-");
+    	a.setAnnee(tab[2]);
+    	a.setMois(tab[1]);
+      	a.supprimervoyagesaison(tab[2], tab[1], datededepart,datederetour);
+    	a.supprimervoyagemois(tab[2], tab[1], datededepart,datederetour);
+    	VG.SupprimerVoyageurEnGroupe(depart, datededepart,destination, datederetour,numpasseport);
+    	supprimervoyagepays(destination.substring(0,destination.indexOf('-')),datededepart);
+    	File file = new File("C:\\AgencedeVoyage\\Tousvoyages\\"+ numpasseport + ".txt");
+		File temp = new File("C:\\AgencedeVoyage\\Tousvoyages\\"+"temp" +numpasseport+".txt");
 	    PrintWriter out = new PrintWriter(new FileWriter(temp));
-	    Files.lines(file.toPath()).filter(line -> !line.contains(date)).forEach(out::println);
+	    Files.lines(file.toPath()).filter(line -> (!line.contains(datededepart)&&!line.contains(datederetour))).forEach(out::println);
 	    out.flush();
 	    out.close();
 	    temp.renameTo(file);
 	    file.delete();
-	    File ch = new File("C:\\AgencedeVoyage\\Tousvoyages\\"+ pass + ".txt");
+	    File ch = new File("C:\\AgencedeVoyage\\Tousvoyages\\"+ numpasseport+ ".txt");
 	    temp.renameTo(ch);
+	    System.out.println("DONE");
      }
     void supprimervoyagepays(String pays1,String date) throws IOException
     {
-    
-    	File file = new File("C:\\AgencedeVoyage\\Tousvoyages\\pays\\"+pays1+".txt");
-		File temp = new File("C:\\AgencedeVoyage\\Tousvoyages\\pays\\"+"temp" + pays1+".txt");
+    	File file = new File("C:\\AgencedeVoyage\\pays\\"+pays1+".txt");
+		File temp = new File("C:\\AgencedeVoyage\\pays\\"+"temp"+pays1+".txt");
 	    PrintWriter out = new PrintWriter(new FileWriter(temp));
 	    Files.lines(file.toPath()).filter(line -> !line.contains(date)).forEach(out::println);
 	    out.flush();
 	    out.close();
 	    temp.renameTo(file);
 	    file.delete();
-	    File ch = new File("C:\\AgencedeVoyage\\Tousvoyages\\pays\\"+ pays1 + ".txt");
+	    File ch = new File("C:\\AgencedeVoyage\\pays\\"+pays1+".txt");
 	    temp.renameTo(ch);
     }
     void retarderpays(String date1 ,String date2) throws IOException
     
     {
-    	File initial = new File ("C:\\AgencedeVoyage\\Tousvoyages\\pays\\");
+    	File initial = new File ("C:\\AgencedeVoyage\\pays\\");
     	String liste[] = initial.list();
         int i=0;
         while (i<liste.length)
 			{
-				File fileToBeModified = new File("C:\\AgencedeVoyage\\Tousvoyages\\pays\\"+liste[i]);
+				File fileToBeModified = new File("C:\\AgencedeVoyage\\pays\\"+liste[i]);
 		     	String oldContent = "";
 				BufferedReader reader = null;
 				FileWriter writer = null;
@@ -383,8 +470,21 @@ public class Touslesvoyages {
 				 }}
     
 
-    void retarder(String annee ,String annee2,String mois1 ,String mois2,String date1 ,String date2 ) throws IOException
-    {
+    void retarder() throws IOException
+    {	
+    	sc=new Scanner(System.in);
+    	System.out.println("donner la date a retarder ");
+    	String date1=sc.nextLine();
+    	String [] tab1=date1.split("-");
+    	String annee=tab1[2];
+    	String mois1=tab1[1];
+    	System.out.println("donner la nouvelle date voulu");
+    	String date2=sc.nextLine();
+    	String [] tab2=date2.split("-");
+    	String annee2=tab2[2];
+    	String mois2=tab2[1];
+    	Voyageengroupe VG=new Voyageengroupe();
+    	VG.retarderGroupe(date1, date2);
     	retarderpays(date1,date2);
     	a.retardersaison(annee,annee2,mois1,mois2,date1,date2);
     	File initial = new File ("C:\\AgencedeVoyage\\Tousvoyages\\");

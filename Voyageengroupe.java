@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.Scanner;
 
 
@@ -111,15 +113,46 @@ public class Voyageengroupe{
 		}
 		System.out.println("les groupes disponibles sont : "+ch+" Veuillez choisir votre groupe souhaité");
 	}
-	public String choixGroupeaRetarder()
+	void supprimerDossierVoyageEnGroupe(String depart,String datededepart,String destination,String datederetour)
 	{
-		System.out.println("donner le nom Dest");
-		String ch=s.nextLine();
-		return ch;
+		File f=new File("C:\\AgencedeVoyage\\VoyagerEnGroupe\\"+depart+'_'+destination+"_"+datededepart+"_"+datederetour);
+		if (f.exists())
+		{
+			f.delete();
+		}
+		}
+	void SupprimerVoyageurEnGroupe(String depart,String datededepart,String destination,String datederetour,String numpasseport ) throws IOException
+    {
+		String ch=depart+'_'+destination+'_'+datededepart+'_'+datederetour;
+		System.out.println(ch);
+		File f=new File("C:\\AgencedeVoyage\\VoyagerEnGroupe\\"+ch);
+		String[] tab=f.list();
+		for (int i=0;i<tab.length;i++)
+			{
+			File fichier =new File("C:\\AgencedeVoyage\\VoyagerEnGroupe\\"+ch+"\\"+tab[i]+"\\"+numpasseport+".txt");
+			if (fichier.exists())
+			{
+				fichier.delete();
+			}
+		}			
+	}
+	public void retarderGroupe(String date1,String date2)
+	{
+		Destination=new File("C:\\AgencedeVoyage\\VoyagerEnGroupe\\");
+		String[] liste=Destination.list();
+		for(int i=0;i<liste.length;i++)
+		{
+			if (liste[i].contains(date1))
+			{
+				String nouv=liste[i].replace(date1,date2);
+				File ANCIEN=new File("C:\\AgencedeVoyage\\VoyagerEnGroupe\\"+liste[i]);
+				File NOUV=new File("C:\\AgencedeVoyage\\VoyagerEnGroupe\\"+nouv);
+				ANCIEN.renameTo(NOUV);				
+			}
+		}
 		
 	}
-	
-	public void retarderdatedeRetourGroupe(String ch1)
+	/*public void retarderdatedeRetourGroupe(String ch1)
 	{
 		Destination=new File("C:\\AgencedeVoyage\\VoyagerEnGroupe\\"+ch1);
 		System.out.println("donner la nouvelle date de retour");
@@ -138,7 +171,7 @@ public class Voyageengroupe{
 		String nouvNom=tab[0]+'_'+tab[1]+'_'+ch+'_'+tab[3];
 		File DepartApres=new File("C:\\AgencedeVoyage\\VoyagerEnGroupe\\"+nouvNom);
 		Destination.renameTo(DepartApres);
-	}
+	}*/
 	public void finalize()
 	{
 		s.close();;

@@ -17,7 +17,7 @@ public class Statistique {
 	Touslesvoyages tv ; 
 	Année an;
 	protected File TouslesVoyages;
-	public Statistique() {
+	public Statistique() throws IOException  {
 		TouslesVoyages=new File("C:\\AgencedeVoyage\\Tousvoyages\\");
 		an = new Année();
 		tv = new Touslesvoyages();

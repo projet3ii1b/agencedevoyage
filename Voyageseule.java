@@ -85,7 +85,7 @@ public class Voyageseule{
 		BW.close();
 		FW.close();	
 	}
-	 void supprimervoyage(String annee,String mois,String pays1,String pass,String date ) throws IOException
+	 void supprimervoyage(String annee,String mois,String pays1,String pass,String date) throws IOException
 	    {
 	    	File file = new File("C:\\AgencedeVoyage\\voyageseule\\"+ pass + ".txt");
 			File temp = new File("C:\\AgencedeVoyage\\voyageseule\\"+"temp" + pass+".txt");
@@ -97,9 +97,9 @@ public class Voyageseule{
 		    file.delete();
 		    File ch = new File("C:\\AgencedeVoyage\\voyageseule\\"+ pass + ".txt");
 		    temp.renameTo(ch);
-		    v.supprimervoyage(annee,mois,pays1,pass, date );   
+		    v.supprimervoyage();   
 	     }
-	 void retarder(String annee,String annee2,String mois1,String mois2,String date1 ,String date2 ) throws IOException
+	 /*void retarder(String annee,String annee2,String mois1,String mois2,String date1 ,String date2) throws IOException
 	    {
 		    v.retarder(annee,annee2,mois1,mois2,date1,date2);
 	    	File initial = new File ("C:\\AgencedeVoyage\\voyageseule\\");
@@ -126,5 +126,5 @@ public class Voyageseule{
 		              writer.close();
 		              i++;
 			} 
-	    }
+	    }*/
 }
