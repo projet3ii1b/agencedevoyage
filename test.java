@@ -2,17 +2,17 @@ package agencedevoyage;
 
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.Scanner;
 
 public class test {
 	
 
 	public static void main (String args[]) throws IOException
 	{
+		
 			menu.Principale();
 			Touslesvoyages T=new Touslesvoyages();
 			Statistique S=new Statistique();
-			CalculDate c=new CalculDate();
+			Age a=new Age();
 			Scanner s=new Scanner(System.in);
 			int choix=s.nextInt();
 			switch(choix)
@@ -31,7 +31,7 @@ public class test {
 			}
 			case 2 :
 			{
-				T.retarder();
+				T.RetardparNbJour();
 				break;
 				
 			}
@@ -53,7 +53,7 @@ public class test {
 			}
 			case 6 :
 			{
-				T.nombreVoyagesspaysTotale();
+				T.afficheVoyagesspaysTotale();
 				break;
 				
 			}
@@ -90,10 +90,12 @@ public class test {
 			}
 			case 13:
 			{
-				c.trancheAge();
+				a.trancheAge();
 				break;
 				
 			}
+			default :
+				System.out.println("choix saisi non valide ! ");
 			
 			
 			}

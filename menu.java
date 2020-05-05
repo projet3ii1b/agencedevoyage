@@ -5,7 +5,7 @@ public class menu {
         System.out.println("***************************Menu***************************");
         System.out.println("__________________Ajouter un Voyageur(0)___________________");
         System.out.println("_________Afficher tous les voyages d'un voyageur(1)________");
-        System.out.println("________________Retarder un Voyage(2)_________________");
+        System.out.println("___________________Retarder un Voyage(2)___________________");
         System.out.println("__________________Supprimer un Voyage(3)___________________");
         System.out.println("__________Tirage au sort pour gagner un voyage(4)__________");
         System.out.println("_________Afficher Tous les voyages de l'agence(5)__________");
